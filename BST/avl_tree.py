@@ -49,6 +49,15 @@ class AVLTree:
         return root
 
     def leftRotate(self, root):
+        """
+        Rotate left if the tree is right skewed.
+
+        Args:
+            root (Node): Node of a tree
+
+        Returns:
+            Node: The new node after left rotation
+        """
         y = root.right
         t2 = y.left
 
@@ -63,6 +72,15 @@ class AVLTree:
 
     
     def rightRotate(self, root):
+        """
+        Rotate right if the tree is left skewed.
+
+        Args:
+            root (Node): Node of a tree.
+
+        Returns:
+            Node: New node after the right rotation
+        """
         y = root.left
         t3 = y.right
 
@@ -77,15 +95,36 @@ class AVLTree:
         return y
 
     def getHeight(self, root):
+        """
+        Get the height of a node.
+
+        Args:
+            root (Node): Node of a tree
+
+        Returns:
+            int: The height of the current node.
+        """
         if root == None:
             return 0
         return root.height
     
     def getBalanceFactor(self, root):
+        """
+        Gets the balance factor of the node
+
+        Args:
+            root (Node): Node of a tree.
+
+        Returns:
+            int: Balance factor of the current node.
+        """
         if root == None:
             return 0
         
         return self.getHeight(root.left) - self.getHeight(root.right)
+
+
+    # After this all the operations performed are similar to the BST operation. 
 
     def inorder(self, root):
         if root == None:
@@ -95,19 +134,65 @@ class AVLTree:
         print(root.key, end = " ")
         self.inorder(root.right)
 
+    def search(self, root, val):
+        if root == None:
+            return False
+        elif root.key == val:
+            return True
+        elif root.key > val:
+            return self.search(root.left, val)
+        elif root.key < val:
+            return self.search(root.right, val)
+        
+
+    def getRightMin(self, root):
+        temp = root
+
+        while temp.left != None:
+            temp = temp.left
+        
+        return temp.key
+
+    def delete(self, root, val):
+        if root == None:
+            return
+        
+        elif root.key > val:
+            self.left = self.delete(root.left, val)
+        
+        elif root.key < val:
+            self.right = self.delete(root.right, val)
+
+        else:
+            if root.left == None and root.right == None:
+                return None
+            elif root.left == None:
+                return root.right
+            elif root.right == None:
+                return root.left
+            else:
+                rightMin = self.getRightMin(root.right)
+                root.key = rightMin
+                root.right = self.delete(root.right, rightMin)
+
+
 
 if __name__ == "__main__":
 
-  avl = AVLTree()
-  root = None
+    avl = AVLTree()
+    root = None
 
-  root = avl.insert(root, 10)
-  root = avl.insert(root, 20)
-  root = avl.insert(root, 30)
-  root = avl.insert(root, 40)
-  root = avl.insert(root, 50)
-  root = avl.insert(root, 25)
+    root = avl.insert(root, 10)
+    root = avl.insert(root, 20)
+    root = avl.insert(root, 30)
+    root = avl.insert(root, 40)
+    root = avl.insert(root, 50)
+    root = avl.insert(root, 25)
 
 
-  print("Inorder Traversal")
-  avl.inorder(root)
+    print("Inorder Traversal")
+    avl.inorder(root)
+    print()
+    avl.delete(root, 20)
+    avl.inorder(root)
+    print()
