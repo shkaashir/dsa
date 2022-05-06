@@ -7,7 +7,7 @@ class Node:
         self.next = None
 
 class LinkList:
-    '''Linked list with head and tail initialization'''
+    '''Linked list with head and tail initialization to null at first'''
     def __init__(self):
         self.head = None
         self.tail = None
@@ -31,36 +31,30 @@ class LinkList:
         else:
             self.tail.next = node
             self.tail = node
-    def insert_at_anywhere(self,data,position):
-        '''INsert the data ant given position'''
-        newNode = Node(data)
-        headNode = self.head
-        if (position < 0):
-            print("Invalid position!")
-        if position == 0:
-            newNode = Node(data)
-            newNode.next = headNode
-            self.head = newNode
-            self.tail=newNode
-        else:
-            # Keep looping until the position is zero
-            while (position != 0):
-                position -= 1
-                if (position == 0):
-                    # Making the new Node to point to
-                    # the old Node at the same position
-                    newNode.next = headNode.next
-                    # Replacing headNode with new Node
-                    # to the old Node to point to the new Node
-                    headNode.next = newNode
-                    break
-                headNode = headNode.next
-                if headNode == None:
-                    break
-            if position != 0:
-                print("position out of range")
-        return headNode
 
+    def insert_at(self,index,data):
+        '''insert data at any position of linked list'''
+        node = Node(data)
+        count = 0
+        temp = self.head
+        if index == 0 or temp is None:
+            # call insert at beginning
+            self.insert_at_start(data)
+            return
+        if temp.next is None:
+            self.insert_at_end(data)
+            return
+        while count < index-1:
+            if temp.next is None:
+                print("Index out of range")
+                return
+            temp = temp.next
+            count+=1
+        node.next = temp.next
+        temp.next = node
+
+    def delete_from_start(self):
+        self.head = self.head.next
     def show(self):
         '''to display all linked list'''
         node_val = ''
@@ -76,12 +70,9 @@ class LinkList:
         return self.head.data
 
 ll = LinkList()
-# ll.insert_at_start(10)
-ll.insert_at_start(20)
-ll.insert_at_start(30)
-# ll.insert_at_start(200)
-# ll.insert_at_start(300)
-ll.insert_at_end(40)
-ll.insert_at_anywhere(21,3)
+ll.insert_at_start(10)
+ll.insert_at_end(30)
+ll.insert_at(1,8)
+ll.insert_at_start(60)
 print(ll.show())
-ll.peek()
+print(ll.peek())
